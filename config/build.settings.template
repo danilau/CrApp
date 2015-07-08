@@ -1,0 +1,9 @@
+user_time=3600
+
+redis_host=localhost
+redis_iphost=127.0.0.1
+redis_port=6379
+redis_db=1
+
+websocket_port=8080
+websocket_avhost=0.0.0.0

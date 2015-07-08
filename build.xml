@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Classroom app" default="build">
+    <resolvepath propertyName="root_path" file="./" />
+
+    <php function="date" returnProperty="build_date">
+        <param value="c" />
+    </php>
+    <php function="time" returnProperty="build_timestamp" />
+
+    <available file="${build_settings_file}" property="build_settings_file_exists" value="1" />
+    <if>
+        <equals arg1="${build_settings_file_exists}" arg2="1" />
+        <then>
+            <property file="${build_settings_file}" />
+        </then>
+    </if>
+
+    <target name="build" depends="clean,compile-configuration,compile-vendors,start-websockets"></target>
+
+    <target name="clean">
+        <delete dir="${root_path}/vendor/" quiet="true" />
+        <delete file="${root_path}/config/web.php" quiet="true" />
+    </target>
+
+    <target name="compile-vendors">
+        <available file="${vendor_path}" property="vendor_path_exists" value="1" />
+        <if>
+            <equals arg1="${vendor_path_exists}" arg2="1" />
+            <then>
+                <symlink target="${vendor_path}" link="${root_path}/vendor" />
+            </then>
+        </if>
+
+        <exec command="php composer.phar install --optimize-autoloader --no-ansi" checkreturn="true" passthru="true" />
+    </target>
+
+    <target name="compile-configuration">
+        <copy file="${root_path}/config/web.php.template" tofile="${root_path}/config/web.php" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="@@" endtoken="@@">
+                    <token key="USER_TIME" value="${user_time}" />
+                    <token key="REDIS_HOST" value="${redis_host}" />
+                    <token key="REDIS_PORT" value="${redis_port}" />
+                    <token key="REDIS_DB" value="${redis_db}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+        <copy file="${root_path}/config/console.php.template" tofile="${root_path}/config/console.php" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="@@" endtoken="@@">
+                    <token key="WS_HOST" value="${websocket_avhost}" />
+                    <token key="WS_PORT" value="${websocket_port}" />
+                    <token key="REDIS_HOST" value="${redis_host}" />
+                    <token key="REDIS_IPHOST" value="${redis_iphost}" />
+                    <token key="REDIS_PORT" value="${redis_port}" />
+                    <token key="REDIS_DB" value="${redis_db}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+    <target name="start-websockets">
+        <exec command="./yii web-socket/run" />
+    </target>
+</project>

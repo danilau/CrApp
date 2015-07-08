@@ -1,0 +1,39 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Andrej
+ * Date: 25.6.15
+ * Time: 18.14
+ */
+return [
+    'id' => 'classroom app',
+    'basePath' => realpath(__DIR__.'/../'),
+    'components' => [
+        'user' => [
+            'identityClass' => 'app\models\User',
+            'enableSession' => true,
+            'loginUrl' => null
+        ],
+        'userSettings' => [
+                    'class' => 'app\components\UserSettings',
+                    'expireTime' => @@USER_TIME@@
+                ],
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => '@@REDIS_HOST@@',
+            'port' => '@@REDIS_PORT@@',
+            'database' => '@@REDIS_DB@@',
+        ],
+        'request' => [
+            'cookieValidationKey' => 's11kr3tK3!'
+        ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                'members' => 'site/members',
+                'logout' => 'site/logout'
+            ]
+        ]
+    ]
+];

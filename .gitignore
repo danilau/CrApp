@@ -1,0 +1,8 @@
+/.vagrant/*
+/config/build.settings
+/config/web.php
+/vendor/*
+access.log
+composer.phar
+error.log
+phing.phar

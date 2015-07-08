@@ -1,0 +1,25 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Andrej
+ * Date: 27.6.15
+ * Time: 23.06
+ */
+return [
+    'id' => 'coins-console',
+    'basePath' => dirname(__DIR__),
+    'components' => [
+        'redis' => [
+                'class' => 'yii\redis\Connection',
+                'hostname' => '@@REDIS_HOST@@',
+                'port' => @@REDIS_PORT@@,
+                'database' => @@REDIS_DB@@,
+            ],
+        'websocket' => [
+            'class' => 'app\components\WebSocketServer',
+            'host' => '@@WS_HOST@@',
+            'port' => @@WS_PORT@@,
+            'redisIpHost' => '@@REDIS_IPHOST@@'
+        ]
+    ],
+];
